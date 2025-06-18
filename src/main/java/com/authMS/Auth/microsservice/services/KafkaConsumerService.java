@@ -12,8 +12,8 @@ public class KafkaConsumerService {
     private final UserService userService;
 
     @KafkaListener(
-            topics = "user/register",
-            groupId = "user-events",
+            topics = "user-events",
+            groupId = "user-register",
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void listenUserRegister(UserDto userDto) {
