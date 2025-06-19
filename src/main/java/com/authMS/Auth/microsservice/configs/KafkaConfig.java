@@ -26,7 +26,7 @@ public class KafkaConfig{
         return new DefaultKafkaConsumerFactory<>(
                 Map.of(
                         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
-                        ConsumerConfig.GROUP_ID_CONFIG, "user-events",
+                        ConsumerConfig.GROUP_ID_CONFIG, "user-register",
                         ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class
                 ),
