@@ -1,6 +1,7 @@
 package com.authMS.Auth.microsservice.services;
 
 import com.authMS.Auth.microsservice.dtos.UserDto;
+import com.authMS.Auth.microsservice.exceptions.UserAlreadyRegistered;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class KafkaConsumerService {
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void listenUserRegister(UserDto userDto) {
-        userService.registerUser(userDto);
+       try{
+           userService.registerUser(userDto);
+       }catch (UserAlreadyRegistered e){
+           System.out.println(e.getMessage());
+       }
     }
 }
