@@ -8,6 +8,7 @@ import com.authMS.Auth.microsservice.mappers.UserMapper;
 import com.authMS.Auth.microsservice.models.UserModel;
 import com.authMS.Auth.microsservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,11 @@ public class UserService {
 
     public void registerUser(UserDto userDto) {
         userRepository.findByEmail(userDto.email()).ifPresent((user) -> {
-            throw new UserAlreadyRegistered("User already registered");
+            throw new UserAlreadyRegistered("Email already registered");
+        });
+
+        userRepository.findByUsername(userDto.username()).ifPresent((user) -> {
+            throw new UserAlreadyRegistered("Username already registered");
         });
 
         userRepository.save(userMapper.userDtoToModel(userDto));
@@ -35,16 +40,10 @@ public class UserService {
             userModel = userRepository.findByUsername(userLoginDto.username()).orElseThrow(() -> new UserNotFound("Invalid Credentials"));
         }
 
-        if (!userModel.getPassword().equals(userLoginDto.password())) {
+        if (!BCrypt.checkpw(userLoginDto.password(), userModel.getPassword())) {
             throw new UserNotFound("Invalid Credentials");
         }
 
         return jwtService.generateToken(userMapper.userModelToDto(userModel));
-    }
-
-    public UserDto getUserByEmail(String email) {
-        UserModel userModel = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFound("Email not registered"));
-
-        return userMapper.userModelToDto(userModel);
     }
 }
