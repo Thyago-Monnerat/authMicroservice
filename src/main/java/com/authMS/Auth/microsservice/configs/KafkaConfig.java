@@ -1,6 +1,6 @@
 package com.authMS.Auth.microsservice.configs;
 
-import com.authMS.Auth.microsservice.dtos.LogMessage;
+import com.authMS.Auth.microsservice.dtos.LogMessageDto;
 import com.authMS.Auth.microsservice.dtos.UserDto;
 
 
@@ -47,7 +47,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, LogMessage> producerFactory() {
+    public ProducerFactory<String, LogMessageDto> producerFactory() {
         return new DefaultKafkaProducerFactory<>(
                 Map.of(
                         ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
@@ -58,7 +58,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, LogMessage> kafkaTemplate() {
+    public KafkaTemplate<String, LogMessageDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
